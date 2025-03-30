@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        /* Cyberpunk-inspired theme */
+        body {
+            background-color: #0d0d0d;
+            color: #00ff99;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FFEA00;
+            text-shadow: 2px 2px 5px #00ff99;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chat-box {
+            width: 60%;
+            border: 2px solid #00ff99;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0px 0px 10px #00ff99;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        #message-input {
+            width: 50%;
+            padding: 8px;
+            border: 2px solid #FFEA00;
+            background: black;
+            color: #00ff99;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: #FFEA00;
+            border: none;
+            color: #0d0d0d;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00ff99;
+            color: #0d0d0d;
+            box-shadow: 0px 0px 10px #00ff99;
+        }
+
+        /* Custom Emoji Picker Styling */
+        #emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            background: #222;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #00ff99;
+            z-index: 100;
+            max-width: 300px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        #emoji-picker span {
+            font-size: 1.5em;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #emoji-picker span:hover {
+            transform: scale(1.2);
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Simple Chat</h1>
+    
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Type a message..." />
+            <button id="emoji-button">😀</button>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        <div id="emoji-picker">
+            <span>😀</span> <span>😁</span> <span>😂</span> <span>🤣</span> <span>😊</span> <span>😎</span> 
+            <span>😍</span> <span>😘</span> <span>😜</span> <span>🤔</span> <span>😏</span> <span>😡</span> 
+            <span>🥶</span> <span>🥳</span> <span>💀</span> <span>👀</span> <span>🔥</span> <span>💯</span> 
+            <span>🚀</span> <span>🤖</span> <span>🎉</span> <span>👾</span> <span>🐱</span> <span>🦄</span>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const messageInput = document.getElementById("message-input");
+        const emojiButton = document.getElementById("emoji-button");
+        const emojiPicker = document.getElementById("emoji-picker");
+
+        const username = prompt("Enter your name:");
+
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const message = `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+            chatBox.innerHTML += message;
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
+        };
+
+        function sendMessage() {
+            const message = messageInput.value;
+            if (message.trim() !== "") {
+                socket.send(JSON.stringify({ message: message, username: username }));
+                messageInput.value = "";
+            }
+        }
+
+        // Send message when Enter is pressed
+        messageInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Show/hide emoji picker
+        emojiButton.addEventListener("click", function() {
+            emojiPicker.style.display = emojiPicker.style.display === "block" ? "none" : "block";
+        });
+
+        // Insert selected emoji into input field
+        emojiPicker.addEventListener("click", function(event) {
+            if (event.target.tagName === "SPAN") {
+                messageInput.value += event.target.textContent;
+                emojiPicker.style.display = "none"; // Hide picker after selection
+                messageInput.focus();
+            }
+        });
+
+    </script>
+</body>
+</html>
