@@ -26,8 +26,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data['message']
-        username = data['username']
+        message = data.get('message')  # Use .get() to avoid KeyError
+        username = data.get('username')
+
+        if not message or not username:
+            await self.send(text_data=json.dumps({
+                'error': 'Message and username are required'
+            }))
+            return
 
         # Broadcast the message to the group
         await self.channel_layer.group_send(
@@ -39,30 +45,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # async def save_to_db(self,data):
-    #     # Save the message to the database
-    #     user = await sync_to_async(User.objects.get)(username='pwn')
-    #     await sync_to_async(Message.objects.create)(
-    #         user=user,
-    #         text='message',
-    #         timestamp=datetime.date.today
-    #         # room_name=self.room_name  # Save room name
-    #     )
-
     async def chat_message(self, event):
-        username=event['username']
+        username = event['username']
         message = event['message']
-        user = await sync_to_async(User.objects.get)(username=username)
-        await sync_to_async(Message.objects.create)(
-            user=user,
-            text=message,
-            timestamp=datetime.date.today
-            # room_name=self.room_name  # Save room name
-        )
-        await self.send(text_data=json.dumps({
-            'message': event['message'],
-            'username': event['username']
-        }))
+        
+        try:
+            user = await sync_to_async(User.objects.get)(username=username)
+            
+            # Save the message to the database with timestamp including time
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')  # ISO 8601 format
 
-    
-    
+            # Save message
+            await sync_to_async(Message.objects.create)(
+                user=user,
+                text=message,
+                timestamp=timestamp  # Save in the desired format
+            )
+            
+            # Send message with timestamp to the frontend
+            await self.send(text_data=json.dumps({
+                'message': message,
+                'username': username,
+                'timestamp': timestamp
+            }))
+        except User.DoesNotExist:
+            # Handle case where the user doesn't exist
+            await self.send(text_data=json.dumps({
+                'error': 'User not found'
+            }))

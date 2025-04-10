@@ -72,6 +72,34 @@
             box-shadow: 0px 0px 10px #00ff99;
         }
 
+        /* Pagination Styling */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .pagination a {
+            color: #00ff99;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 0 5px;
+            border: 1px solid #00ff99;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #00ff99;
+            color: #0d0d0d;
+        }
+
+        .pagination .current {
+            background-color: #00ff99;
+            color: #0d0d0d;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
         /* Custom Emoji Picker Styling */
         #emoji-picker {
             position: absolute;
@@ -99,19 +127,53 @@
             transform: scale(1.2);
         }
 
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <h1>Simple Chat</h1>
+    <!-- Pagination Links -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            
+             <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
     
     <div id="chat-container">
-        <div id="chat-box"></div>
-        <div id="input-container" >
-            <input type="hidden" id="username" value="{{username}}">
+        <div id="chat-box">
+            <!-- chat.html -->
+            {% for message in page_obj %}
+                <div class="message">
+                    <strong>{{ message.username }}</strong>: {{ message.text }}
+                    <p class="timestamp">{{ message.timestamp }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+        
+
+        <div id="input-container">
             <input type="text" id="message-input" placeholder="Type a message..." />
             <button id="emoji-button">😀</button>
             <button onclick="sendMessage()">Send</button>
         </div>
+        
         <div id="emoji-picker">
             <span>😀</span> <span>😁</span> <span>😂</span> <span>🤣</span> <span>😊</span> <span>😎</span> 
             <span>😍</span> <span>😘</span> <span>😜</span> <span>🤔</span> <span>😏</span> <span>😡</span> 
@@ -125,14 +187,13 @@
         const messageInput = document.getElementById("message-input");
         const emojiButton = document.getElementById("emoji-button");
         const emojiPicker = document.getElementById("emoji-picker");
-
-        const username = document.getElementById('username').value;
-
+        const username = "{{ username|escapejs }}";
         const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
 
         socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            const message = `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+            const messageTime = formatTimestamp(data.timestamp);
+            const message = `<p><strong>${data.username}:</strong> ${data.message} <span class="timestamp">${messageTime}</span></p>`;
             chatBox.innerHTML += message;
             chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
         };
@@ -166,6 +227,18 @@
                 messageInput.focus();
             }
         });
+
+        function formatTimestamp(timestamp) {
+    const now = new Date();
+    const messageTime = new Date(timestamp); // It will work properly if timestamp is ISO string
+    const timeDiff = Math.floor((now - messageTime) / 60000); // difference in minutes
+
+    if (timeDiff < 1) return "Just now";
+    if (timeDiff < 60) return `${timeDiff} minutes ago`;
+    if (timeDiff < 1440) return `${Math.floor(timeDiff / 60)} hours ago`;
+    return messageTime.toLocaleString(); // fallback to full date if older than a day
+}
+
 
     </script>
 </body>
