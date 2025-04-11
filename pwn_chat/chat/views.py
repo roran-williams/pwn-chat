@@ -28,7 +28,7 @@ def chat_view(request):
     paginator = Paginator(messages_with_local_time, 20)  # 20 messages per page
     
     # Get the current page number from the request (default to 1)
-    page_number = request.GET.get('page', -1)
+    page_number = request.GET.get('page',-1)
     
     # Get the page object based on the page number
     page_obj = paginator.get_page(page_number)
