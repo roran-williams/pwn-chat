@@ -4,6 +4,7 @@ from asgiref.sync import sync_to_async
 import datetime
 from django.contrib.auth.models import User
 from .models import Message
+from django.utils import timezone
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -53,7 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user = await sync_to_async(User.objects.get)(username=username)
             
             # Save the message to the database with timestamp including time
-            timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')  # ISO 8601 format
+            timestamp = timezone.now().isoformat()
 
             # Save message
             await sync_to_async(Message.objects.create)(

@@ -12,14 +12,14 @@ def chat_view(request):
     username = request.user.username
     
     # Retrieve all messages ordered by timestamp in descending order (latest first)
-    messages_list = Message.objects.all().order_by('-timestamp')
+    messages_list = Message.objects.all().order_by('timestamp')
 
     # Convert all timestamps to local time zone for display
     messages_with_local_time = [
     {
         'username': message.user.username,
         'text': message.text,
-        'timestamp': timezone.localtime(message.timestamp)
+        'timestamp': message.timestamp
     }
     for message in messages_list
 ]
