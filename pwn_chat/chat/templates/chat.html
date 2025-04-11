@@ -136,29 +136,11 @@
 </head>
 <body>
     <h1>Simple Chat</h1>
-    <!-- Pagination Links -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
-            
-             <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-            
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    
     
     <div id="chat-container">
         <div id="chat-box">
             <!-- chat.html -->
-             
             {% for message in page_obj %}
                 <div class="message">
                     <strong>{{ message.username }}</strong>: {{ message.text }}
@@ -231,16 +213,14 @@
 
         function formatTimestamp(timestamp) {
             const now = new Date();
-            const messageTime = new Date(timestamp); // It will work properly if timestamp is ISO string
+            const messageTime = new Date(timestamp);
             const timeDiff = Math.floor((now - messageTime) / 60000); // difference in minutes
 
             if (timeDiff < 1) return "Just now";
             if (timeDiff < 60) return `${timeDiff} minutes ago`;
             if (timeDiff < 1440) return `${Math.floor(timeDiff / 60)} hours ago`;
-            return messageTime.toLocaleString(); // fallback to full date if older than a day
+            return messageTime.toLocaleString(); // fallback to full date
         }
-
-
     </script>
 </body>
 </html>

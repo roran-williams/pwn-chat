@@ -34,7 +34,7 @@ def chat_view(request):
     page_obj = paginator.get_page(page_number)
     
     # Pass the username and the paginated messages to the template
-    return render(request, "chat.html", {'username': username, 'page_obj': page_obj})
+    return render(request, "chat.html", {'messo':messages_with_local_time,'username': username, 'page_obj': page_obj})
 
 
 
