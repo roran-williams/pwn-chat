@@ -74,9 +74,10 @@
 
         /* Pagination Styling */
         .pagination {
-            display: flex;
-            justify-content: center;
+            /* display: flex; */
+            /* justify-content: center; */
             margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .pagination a {
@@ -135,7 +136,7 @@
     </style>
 </head>
 <body>
-    <h1>Simple Chat</h1>
+    <h1>syndicate</h1>
     <!-- Pagination Links -->
     <div class="pagination">
         <span class="step-links">
@@ -191,8 +192,11 @@
         const emojiButton = document.getElementById("emoji-button");
         const emojiPicker = document.getElementById("emoji-picker");
         const username = "{{ username|escapejs }}";
-        const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
-
+        // const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+        const roomName = "pwn";  // Or dynamic via URL
+        const socket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
         socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             const messageTime = formatTimestamp(data.timestamp);

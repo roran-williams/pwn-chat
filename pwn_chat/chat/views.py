@@ -24,8 +24,8 @@ def chat_view(request):
     for message in messages_list
 ]
 
-    # Set up pagination: show 20 messages per page
-    paginator = Paginator(messages_with_local_time, 20)  # 20 messages per page
+    # Set up pagination: show 10 messages per page
+    paginator = Paginator(messages_with_local_time, 10)  # 10 messages per page
     
     # Get the current page number from the request (default to 1)
     page_number = request.GET.get('page',-1)
@@ -34,7 +34,7 @@ def chat_view(request):
     page_obj = paginator.get_page(page_number)
     
     # Pass the username and the paginated messages to the template
-    return render(request, "chat.html", {'messo':messages_with_local_time,'username': username, 'page_obj': page_obj})
+    return render(request, "chat.html", {'username': username, 'page_obj': page_obj})
 
 
 
