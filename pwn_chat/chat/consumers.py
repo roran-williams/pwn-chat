@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message = data.get('message')  # Use .get() to avoid KeyError
         username = data.get('username')
-
+        
         if not message or not username:
             await self.send(text_data=json.dumps({
                 'error': 'Message and username are required'
@@ -54,7 +54,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         try:
             user = await sync_to_async(User.objects.get)(username=username)
-            room = await sync_to_async(Room.objects.get_or_create)(name=self.room_name)
+            
+            # room = await sync_to_async(Room.objects.get_or_create)(name=self.room_name)
             
             # Save the message to the database with timestamp including time
             timestamp = timezone.now().isoformat()
@@ -62,7 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Save message
             await sync_to_async(Message.objects.create)(
                 user=user,
-                room=room[0],
+                # room=room[0],
                 text=message,
                 timestamp=timestamp  # Save in the desired format
             )

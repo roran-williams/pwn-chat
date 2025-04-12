@@ -12,7 +12,7 @@ class Status(models.Model):
         return self.name
 
 class Room(models.Model):
-    name = models.CharField(max_length=28,null=False,default='pwn')
+    name = models.CharField(max_length=28,null=False,unique=True)
     desc = models.TextField(null=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)  # Use ForeignKey to Status
 

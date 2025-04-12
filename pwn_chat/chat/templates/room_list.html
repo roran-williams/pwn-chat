@@ -15,5 +15,22 @@
     const room = document.getElementById('room');
     function set_url(){
         get_url.action = room.value;
+        
+        const socket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + room.value + '/'
+        );
+
+        function sendMessage() {
+            const room = room.value;
+            const username = "{{ username|escapejs }}";
+
+            if (room.trim() !== "") {
+                socket.send(JSON.stringify({ room: room,username:username }));
+                room.value = "";
+            }
         }
+        sendMessage()
+    }
+
+    
 </script>

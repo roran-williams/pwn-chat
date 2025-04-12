@@ -11,8 +11,23 @@ def room_list(request):
     username = request.user.username
     rooms = Room.objects.all()
     return render(request, 'room_list.html', {'username':username,'rooms': rooms})
+# assigned = None if assigned_option == 'unassigned' else User.objects.get(pk=int(request.POST['assigned']))
 
 def chat_room(request, room_name):
+    rooms = Room.objects.all()
+    is_room = False
+    
+    for r in rooms:
+        if r.name == room_name:
+            is_room = True
+    
+    if is_room:
+        Room.objects.get(name=room_name)
+
+    else:
+        Room.objects.create(name=room_name,created_by=request.user)
+
+
     return render(request, 'chat_room.html', {'room_name': room_name})
 
 
