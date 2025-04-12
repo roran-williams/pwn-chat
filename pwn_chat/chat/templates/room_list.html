@@ -1,0 +1,19 @@
+<h2>Available Rooms</h2>
+<ul>
+  {% for room in rooms %}
+    <li><a href="{% url 'chat_room' room.name %}">{{ room.name }}</a></li>
+  {% endfor %}
+</ul>
+
+<form id="room_name" method="get" action="{% url 'chat_room' ' ' %}">
+    <input name="room" id="room" placeholder="Enter new room name" />
+    <button onclick="set_url()" type="submit">Join / Create Room</button>
+</form>
+
+<script>
+    const get_url = document.getElementById('room_name')
+    const room = document.getElementById('room');
+    function set_url(){
+        get_url.action = room.value;
+        }
+</script>

@@ -2,9 +2,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Message
+from .models import Message, Room
 from django.utils import timezone
 from django.core.paginator import Paginator
+
+
+def room_list(request):
+    username = request.user.username
+    rooms = Room.objects.all()
+    return render(request, 'room_list.html', {'username':username,'rooms': rooms})
+
+def chat_room(request, room_name):
+    return render(request, 'chat_room.html', {'room_name': room_name})
+
 
 @login_required
 def chat_view(request):
