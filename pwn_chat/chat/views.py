@@ -11,9 +11,9 @@ def room_list(request):
     username = request.user.username
     rooms = Room.objects.all()
     return render(request, 'room_list.html', {'username':username,'rooms': rooms})
-# assigned = None if assigned_option == 'unassigned' else User.objects.get(pk=int(request.POST['assigned']))
 
-def chat_room(request, room_name):
+@login_required
+def chat_room(request,room_name):
     rooms = Room.objects.all()
     is_room = False
     
@@ -22,22 +22,15 @@ def chat_room(request, room_name):
             is_room = True
     
     if is_room:
-        Room.objects.get(name=room_name)
+        room=Room.objects.get(name=room_name)
 
     else:
-        Room.objects.create(name=room_name,created_by=request.user)
-
-
-    return render(request, 'chat_room.html', {'room_name': room_name})
-
-
-@login_required
-def chat_view(request):
+        room=Room.objects.create(name=room_name,created_by=request.user)
     # Get the username of the logged-in user
     username = request.user.username
     
     # Retrieve all messages ordered by timestamp in descending order (latest first)
-    messages_list = Message.objects.all().order_by('timestamp')
+    messages_list = Message.objects.filter(room=room).order_by('timestamp')
 
     # Convert all timestamps to local time zone for display
     messages_with_local_time = [
@@ -59,7 +52,7 @@ def chat_view(request):
     page_obj = paginator.get_page(page_number)
     
     # Pass the username and the paginated messages to the template
-    return render(request, "chat.html", {'username': username, 'page_obj': page_obj})
+    return render(request, "chat.html", {'room_name': room_name,'username': username, 'page_obj': page_obj})
 
 
 

@@ -137,7 +137,7 @@
     </style>
 </head>
 <body>
-    <h1>Umbra_syndicate.pwn()</h1>
+    <h1>Umbra_syndicate.pwn({{ room_name }})</h1>
     <!-- Pagination Links -->
     <div class="pagination">
         <span class="step-links">
@@ -194,7 +194,7 @@
         const emojiPicker = document.getElementById("emoji-picker");
         const username = "{{ username|escapejs }}";
         // const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
-        const roomName = "pwn";  // Or dynamic via URL
+        const roomName = "{{ room_name }}";  // Or dynamic via URL
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
         );
