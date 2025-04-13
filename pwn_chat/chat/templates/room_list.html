@@ -10,12 +10,24 @@
     <button onclick="set_url()" type="submit">Join / Create Room</button>
 </form>
 
+<form id="private" method="get" action="{% url 'private_chat' ' ' %}">
+    <input name="user" id="user" placeholder="Enter username to chat with" />
+    <button onclick="set_private_url()" type="submit"> open chat</button>
+</form>
+
 <script>
     const get_url = document.getElementById('room_name')
+    const private = document.getElementById('private')
+    const receiver = document.getElementById('user')
     const room = document.getElementById('room');
+    
+    function set_private_url(){
+        private.action = 'private/' + receiver.value;
+    }
+    
     function set_url(){
-        get_url.action = room.value;
-        
+        if (confirm('Are you sure you want to add a room?') === true){
+            get_url.action = room.value;
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/' + room.value + '/'
         );
@@ -30,7 +42,10 @@
             }
         }
         sendMessage()
+        }else{
+            get_url.action = '';
+        }
+        
     }
-
     
 </script>

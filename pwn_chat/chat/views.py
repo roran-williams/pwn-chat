@@ -5,6 +5,24 @@ from django.contrib.auth.decorators import login_required
 from .models import Message, Room
 from django.utils import timezone
 from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+from django.db.models import Q
+
+
+def private_chat(request, username):
+    other_user = get_object_or_404(User, username=username)
+    me = request.user
+    messages = Message.objects.filter(
+        (Q(sender=request.user) & Q(receiver=other_user)) |
+        (Q(sender=other_user) & Q(receiver=request.user))
+    ).order_by('-timestamp')[:50]
+    print(messages)
+    return render(request, 'private_chat.html', {
+        'other_user': other_user,
+        'messages': reversed(messages),
+        'me':me,
+    })
 
 
 def room_list(request):
