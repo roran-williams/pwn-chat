@@ -4,6 +4,8 @@ from asgiref.sync import sync_to_async
 from django.contrib.auth.models import User
 from .models import Message, Room
 from django.utils import timezone
+import re
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -82,50 +84,113 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }))
 
 
+# class PrivateChatConsumer(AsyncWebsocketConsumer):
+#     async def connect(self):
+#         print('00000000000000000000000')
+
+#         self.me = self.scope['user'].username
+#         self.other_user = self.scope['url_route']['kwargs']['username']
+        
+#         self.room_name = f"private_{min(self.me, self.other_user)}_{max(self.me, self.other_user)}"
+
+#         await self.channel_layer.group_add(
+#             self.room_name,
+#             self.channel_name
+#         )
+#         await self.accept()
+
+    
+#     async def disconnect(self, close_code):
+#         await self.channel_layer.group_discard(
+#             self.room_name,
+#             self.channel_name
+#         )
+
+#     async def receive(self, text_data):
+#         data = json.loads(text_data)
+        
+#         message = data['message']
+#         sender = await sync_to_async(User.objects.get)(username=self.me)
+#         receiver = await sync_to_async(User.objects.get)(username=self.other_user)
+        
+#         msg = await sync_to_async(Message.objects.create)(
+#             sender=sender, receiver=receiver, text=message
+#         )
+
+#         await self.channel_layer.group_send(
+#             self.room_name,
+#             {
+#                 'type': 'chat_message',
+#                 'message': message,
+#                 'sender': self.me
+#             }
+#         )
+
+#     async def chat_message(self, event):
+#         await self.send(text_data=json.dumps({
+#             'message': event['message'],
+#             'sender': event['sender']
+#         }))
+
+import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
+from django.contrib.auth.models import User
+from .models import PrivateMessage
+from django.utils import timezone
+
 class PrivateChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        print('00000000000000000000000')
-
-        self.me = self.scope['user'].username
-        self.other_user = self.scope['url_route']['kwargs']['username']
         
-        self.room_name = f"private_{min(self.me, self.other_user)}_{max(self.me, self.other_user)}"
 
-        await self.channel_layer.group_add(
-            self.room_name,
-            self.channel_name
-        )
+        self.user = self.scope['user']
+        self.other_username = self.scope['url_route']['kwargs']['username']
+        
+        if not self.user.is_authenticated:
+            await self.close()
+            return
+        
+        self.other_user = await sync_to_async(User.objects.get)(username=self.other_username)
+        def clean_username(username):
+            return re.sub(r'[^a-zA-Z0-9_.-]', '_', username)
+
+        cleaned_user = clean_username(self.scope['user'].username)
+        cleaned_other = clean_username(self.other_username)
+
+        
+        # self.room_group_name = f"private_{min(self.user.username, self.other_user.username)}_{max(self.user.username, self.other_user.username)}"
+        self.room_group_name = f"private_{cleaned_user}_{cleaned_other}"
+
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
     
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.room_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        
         message = data['message']
-        sender = await sync_to_async(User.objects.get)(username=self.me)
-        receiver = await sync_to_async(User.objects.get)(username=self.other_user)
-        
-        msg = await sync_to_async(Message.objects.create)(
-            sender=sender, receiver=receiver, text=message
+
+        msg = await sync_to_async(PrivateMessage.objects.create)(
+            sender=self.user, receiver=self.other_user, text=message
         )
 
+        timestamp = timezone.now().isoformat()
+
         await self.channel_layer.group_send(
-            self.room_name,
+            self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'sender': self.me
+                'sender': self.user.username,
+                'timestamp': timestamp
             }
         )
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
             'message': event['message'],
-            'sender': event['sender']
+            'sender': event['sender'],
+            'timestamp': event['timestamp']
         }))

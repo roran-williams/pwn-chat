@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
-from .models import Message, Room, Status
+from .models import Message, PrivateMessage, Room, Status
 
 from django.utils import timezone
 
@@ -38,19 +38,19 @@ def update_room(request, room_name):
     return HttpResponseRedirect(f"/chat/room/{room.name}/")
 
 
-def private_chat(request, username):
-    other_user = get_object_or_404(User, username=username)
-    me = request.user
-    messages = Message.objects.filter(
-        (Q(sender=request.user) & Q(receiver=other_user)) |
-        (Q(sender=other_user) & Q(receiver=request.user))
-    ).order_by('-timestamp')[:50]
-    print(messages)
-    return render(request, 'private_chat.html', {
-        'other_user': other_user,
-        'messages': reversed(messages),
-        'me':me,
-    })
+# def private_chat(request, username):
+#     other_user = get_object_or_404(User, username=username)
+#     me = request.user
+#     messages = Message.objects.filter(
+#         (Q(sender=request.user) & Q(receiver=other_user)) |
+#         (Q(sender=other_user) & Q(receiver=request.user))
+#     ).order_by('-timestamp')[:50]
+#     print(messages)
+#     return render(request, 'private_chat.html', {
+#         'other_user': other_user,
+#         'messages': reversed(messages),
+#         'me':me,
+#     })
 
 
 def room_list(request):
@@ -85,7 +85,8 @@ def chat_room(request,room_name):
     # Retrieve all messages ordered by timestamp in descending order (latest first)
     messages_list = Message.objects.filter(room=room).order_by('timestamp')
     last_message_timestamp = messages_list.first().timestamp if messages_list.first() else None
-
+    message_count = messages_list.count()
+   
     # Convert all timestamps to local time zone for display
     messages_with_local_time = [
     {
@@ -106,4 +107,19 @@ def chat_room(request,room_name):
     page_obj = paginator.get_page(page_number)
     
     # Pass the username and the paginated messages to the template
-    return render(request, "chat.html", {'last_message_timestamp':last_message_timestamp, 'room': room,'username': username, 'page_obj': page_obj})
+    return render(request, "chat.html", {'message_count':message_count, 'last_message_timestamp':last_message_timestamp, 'room': room,'username': username, 'page_obj': page_obj})
+
+
+def private_chat_room(request, username):
+    other_user = get_object_or_404(User, username=username)
+    
+    # Get the chat history between the logged-in user and the other user
+    messages = PrivateMessage.objects.filter(
+        sender__in=[request.user, other_user],
+        receiver__in=[request.user, other_user]
+    ).order_by('timestamp')
+
+    return render(request, 'private_chat.html', {
+        'other_user': other_user,
+        'messages': messages,
+    })
