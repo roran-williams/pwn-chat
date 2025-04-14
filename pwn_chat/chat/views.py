@@ -119,6 +119,11 @@ def private_chat_room(request, username):
         receiver__in=[request.user, other_user]
     ).order_by('timestamp')
 
+    # messages = PrivateMessage.objects.filter(
+    #     (Q(sender=request.user) & Q(receiver=other_user)) |
+    #     (Q(sender=other_user) & Q(receiver=request.user))
+    # ).order_by('-timestamp')[:50]
+
     return render(request, 'private_chat.html', {
         'other_user': other_user,
         'messages': messages,
