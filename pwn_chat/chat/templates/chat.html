@@ -137,7 +137,15 @@
     </style>
 </head>
 <body>
-    <h1>Umbra_syndicate.pwn({{ room_name }})</h1>
+    
+    <h1>Umbra_syndicate.pwn({{ room.name }})</h1>
+    <b>{{room.desc}}</b>
+    <p>created by: {{room.created_by}}</p>
+    <p>status :{{room.status}}</p>
+    <p>created :{{room.creation_time}}</p>
+    <p>last updated :{{room.update_time}}</p>
+    <p > last message:<b id='last-message'>{{last_message_timestamp}}</b> </p>
+    
     <!-- Pagination Links -->
     <div class="pagination">
         <span class="step-links">
@@ -157,6 +165,8 @@
         </span>
     </div>
     
+    {% if room.status.name == "open" %}
+
     <div id="chat-container">
         <div id="chat-box">
             <!-- chat.html -->
@@ -172,7 +182,6 @@
         </div>
         
         
-
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Type a message..." />
             <button id="emoji-button">😀</button>
@@ -187,14 +196,16 @@
         </div>
     </div>
 
+
     <script>
         const chatBox = document.getElementById("chat-box");
         const messageInput = document.getElementById("message-input");
         const emojiButton = document.getElementById("emoji-button");
         const emojiPicker = document.getElementById("emoji-picker");
         const username = "{{ username|escapejs }}";
+        const lastMessage = document.getElementById('last-message')
         // const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
-        const roomName = "{{ room_name }}";  // Or dynamic via URL
+        const roomName = "{{ room.name }}";  // Or dynamic via URL
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
         );
@@ -203,6 +214,7 @@
             const messageTime = formatTimestamp(data.timestamp);
             const message = `<p><strong>${data.username}:</strong> ${data.message} <span class="timestamp">${messageTime}</span></p>`;
             chatBox.innerHTML += message;
+            lastMessage.innerText = messageTime;s
             chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
         };
 
@@ -250,5 +262,7 @@
 
 
     </script>
+    {% endif %}
+
 </body>
 </html>

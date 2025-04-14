@@ -53,7 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         
         try:
-            user = await sync_to_async(User.objects.get)(username=username)
+            sender = await sync_to_async(User.objects.get)(username=username)
             
             room = await sync_to_async(Room.objects.get_or_create)(name=self.room_name)
             
@@ -62,9 +62,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             # Save message
             await sync_to_async(Message.objects.create)(
-                user=user,
+                
                 room=room[0],
                 text=message,
+                sender=sender,
                 timestamp=timestamp  # Save in the desired format
             )
             

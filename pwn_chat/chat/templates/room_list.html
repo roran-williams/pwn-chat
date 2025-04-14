@@ -1,7 +1,23 @@
 <h2>Available Rooms</h2>
 <ul>
+  
   {% for room in rooms %}
-    <li><a href="{% url 'chat_room' room.name %}">{{ room.name }}</a></li>
+    {% for i in count_list %}
+      {% if i.name == room.name%}
+      <li>
+        {{ room.name }}
+        <b>{{i.count}} txts</b>
+        <a href="{% url 'chat_room' room.name %}">
+            <button>  join</button>
+        </a>
+        
+        {% if room.created_by == request.user %}
+        <a href="{% url 'update' room.name %}">
+        <button>update</button>
+        {%endif%}
+    </li>
+    {%endif%}
+    {%endfor%}
   {% endfor %}
 </ul>
 
@@ -27,7 +43,7 @@
     
     function set_url(){
         if (confirm('Are you sure you want to add a room?') === true){
-            get_url.action = room.value;
+            get_url.action = "room/" + room.value;
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/' + room.value + '/'
         );

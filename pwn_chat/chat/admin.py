@@ -4,9 +4,9 @@ from .models import Message, Room, Status
 # Register your models here.
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('user', 'text', 'timestamp')
-    search_fields = ('user', 'text', 'timestamp')
-    list_filter = ('user', 'text', 'timestamp')
+    list_display = ('sender','receiver', 'text', 'timestamp')
+    search_fields = ('sender','receiver', 'text', 'timestamp')
+    list_filter = ('sender','receiver', 'text', 'timestamp')
 
 
 @admin.register(Room)

@@ -1,13 +1,41 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render , redirect
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
-from .models import Message, Room
+from .models import Message, Room, Status
+
 from django.utils import timezone
+
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.db.models import Q
+
+def update(request, room_name):
+    
+    room = get_object_or_404(Room, name=room_name)
+    status_list = Status.objects.all()
+
+    return render(request, 'update_room.html', {
+        'room': room,'status_list':status_list,
+    })
+
+def update_room(request, room_name):
+    room = get_object_or_404(Room, name=room_name)
+    name = request.POST['name']
+    status = Status.objects.get(pk=int(request.POST['status']))
+    description = request.POST['desc']
+    room.name = name
+    room.desc = description
+    room.status = status
+    room.update_time = timezone.now()
+    room.save()
+
+    messages.success(request, "The room has been updated.")
+    return HttpResponseRedirect(f"/chat/room/{room.name}/")
 
 
 def private_chat(request, username):
@@ -28,7 +56,12 @@ def private_chat(request, username):
 def room_list(request):
     username = request.user.username
     rooms = Room.objects.all()
-    return render(request, 'room_list.html', {'username':username,'rooms': rooms})
+    count_list = []
+    for room in rooms:
+        m = Message.objects.filter(room__name=room.name).count()
+        count_list.append({"name":room.name,'count':m})
+
+    return render(request, 'room_list.html', {'count_list':count_list,'username':username,'rooms': rooms})
 
 @login_required
 def chat_room(request,room_name):
@@ -44,16 +77,19 @@ def chat_room(request,room_name):
 
     else:
         room=Room.objects.create(name=room_name,created_by=request.user)
+    
+    
     # Get the username of the logged-in user
     username = request.user.username
     
     # Retrieve all messages ordered by timestamp in descending order (latest first)
     messages_list = Message.objects.filter(room=room).order_by('timestamp')
+    last_message_timestamp = messages_list.first().timestamp if messages_list.first() else None
 
     # Convert all timestamps to local time zone for display
     messages_with_local_time = [
     {
-        'username': message.user.username,
+        'username': message.sender.username,
         'text': message.text,
         'timestamp': message.timestamp
     }
@@ -70,4 +106,4 @@ def chat_room(request,room_name):
     page_obj = paginator.get_page(page_number)
     
     # Pass the username and the paginated messages to the template
-    return render(request, "chat.html", {'room_name': room_name,'username': username, 'page_obj': page_obj})
+    return render(request, "chat.html", {'last_message_timestamp':last_message_timestamp, 'room': room,'username': username, 'page_obj': page_obj})

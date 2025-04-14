@@ -1,0 +1,21 @@
+{% block content %}
+    <form action="/chat/update_room/{{ room.name }}/" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status"  name="status" class="form-control">
+                {% for status in status_list %}
+                    <option value="{{ status.id }}" {% if room.status.id == status.id %}selected="selected"{% endif %}>{{ status.name }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ room.name }}"/>
+        </div>
+        <textarea name="desc" id="desc" value="{{room.desc}}">{{room.desc}}</textarea>
+        <br />
+        <input type="submit" class="btn btn-primary btn-lg" value="Update" />
+    </form>
+{% endblock %}
