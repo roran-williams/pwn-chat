@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'chat',
+    'accounts',
 ]
 
 ASGI_APPLICATION = "pwn_chat.asgi.application"
