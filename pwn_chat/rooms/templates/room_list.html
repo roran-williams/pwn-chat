@@ -77,12 +77,12 @@
     const room = document.getElementById('room');
     
     function set_private_url(){
-        private.action = 'private/' + receiver.value;
+        private.action = '/private/' + receiver.value;
     }
     
     function set_url(){
         if (confirm('Are you sure you want to add a room?') === true){
-            get_url.action = "room/" + room.value;
+            get_url.action = "/forum/" + room.value;
         const socket = new WebSocket(
             'ws://' + window.location.host + '/ws/chat/' + room.value + '/'
         );

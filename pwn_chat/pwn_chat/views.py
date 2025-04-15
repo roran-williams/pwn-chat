@@ -7,7 +7,7 @@ from django.contrib import messages
 def login_view(request):
     # If the user is already authenticated, redirect to the chat page
     if request.user.is_authenticated:
-        return redirect('/chat/')  # Redirect to chat if already logged in
+        return redirect('/rooms/')  # Redirect to chat if already logged in
     
     if request.method == 'POST':
         username = request.POST['username']
@@ -21,7 +21,7 @@ def login_view(request):
             login(request, user)
             
             # Check if there's a 'next' URL and redirect there, otherwise go to 'chat'
-            next_url = request.GET.get('next', '/chat/')
+            next_url = request.GET.get('next', '/rooms/')
             return redirect(next_url)  # Redirect to the requested URL or default to 'chat'
         else:
             messages.error(request, 'Invalid username or password')  # Show error message if credentials are incorrect

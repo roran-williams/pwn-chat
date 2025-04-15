@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'chat',
     'private_chat',
     'accounts',
+    'rooms',
 ]
 
 ASGI_APPLICATION = "pwn_chat.asgi.application"

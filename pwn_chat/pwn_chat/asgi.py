@@ -1,5 +1,4 @@
 # asgi.py
-
 import os
 import django
 from channels.routing import ProtocolTypeRouter, URLRouter
@@ -13,9 +12,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pwn_chat.settings')
 django.setup()
 
 # ✅ Now it's safe to import from apps
-from chat.routing import websocket_urlpatterns
-from private_chat.routing import websocket_urlpatterns
 
+from chat.routing import websocket_urlpatterns as public
+from private_chat.routing import websocket_urlpatterns as private
+
+websocket_urlpatterns = private + public
 
 # 3. Define the application
 application = ProtocolTypeRouter({

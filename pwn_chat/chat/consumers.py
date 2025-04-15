@@ -2,7 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from django.contrib.auth.models import User
-from .models import Message, Room
+from .models import Message
+from rooms.models import Room
 from django.utils import timezone
 import re
 
@@ -25,7 +26,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
 
     async def receive(self, text_data):
         data = json.loads(text_data)
