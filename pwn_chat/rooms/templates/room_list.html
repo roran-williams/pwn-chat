@@ -1,39 +1,7 @@
-<head>
-    <style>
-        /* Cyberpunk-inspired theme */
-        body {
-            background-color: #0d0d0d;
-            color: #00ff99;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-        }
+{% extends 'base.html' %}
 
-        h1 {
-            color: #FFEA00;
-            text-shadow: 2px 2px 5px #00ff99;
-        }
 
-        
-        button {
-            padding: 8px 15px;
-            background: #FFEA00;
-            border: none;
-            color: #0d0d0d;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #00ff99;
-            color: #0d0d0d;
-            box-shadow: 0px 0px 10px #00ff99;
-        }
-
-    </style>
-</head>
-
+{% block content %}
 <h2>Available Rooms</h2>
 <ul>
   
@@ -104,3 +72,5 @@
     }
     
 </script>
+
+{% endblock %}

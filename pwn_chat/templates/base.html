@@ -1,0 +1,135 @@
+{% block head %}
+<style>
+/* Cyberpunk-inspired theme */
+body {
+    background-color: #0d0d0d;
+    color: #00ff99;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+}
+
+h1 {
+    color: #FFEA00;
+    text-shadow: 2px 2px 5px #00ff99;
+}
+
+#chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#chat-box {
+    width: 60%;
+    border: 2px solid #00ff99;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0px 0px 10px #00ff99;
+    border-radius: 10px;
+    text-align: left;
+}
+
+#input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+#message-input {
+    width: 50%;
+    padding: 8px;
+    border: 2px solid #FFEA00;
+    background: black;
+    color: #00ff99;
+    border-radius: 5px;
+    outline: none;
+}
+
+button {
+    padding: 8px 15px;
+    background: #FFEA00;
+    border: none;
+    color: #0d0d0d;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #00ff99;
+    color: #0d0d0d;
+    box-shadow: 0px 0px 10px #00ff99;
+}
+
+/* Pagination Styling */
+.pagination {
+    /* display: flex; */
+    /* justify-content: center; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pagination a {
+    color: #00ff99;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin: 0 5px;
+    border: 1px solid #00ff99;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #00ff99;
+    color: #0d0d0d;
+}
+
+.pagination .current {
+    background-color: #00ff99;
+    color: #0d0d0d;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
+
+/* Custom Emoji Picker Styling */
+#emoji-picker {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    background: #222;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #00ff99;
+    z-index: 100;
+    max-width: 300px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#emoji-picker span {
+    font-size: 1.5em;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#emoji-picker span:hover {
+    transform: scale(1.2);
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #a9a3a3;
+    margin-top: 5px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
