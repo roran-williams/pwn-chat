@@ -6,6 +6,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # login/logout
     path("admin/", admin.site.urls),
     path("chat/", include("chat.urls")),
+    path("private/", include("private_chat.urls")),
     path('login/', login_view, name='login'),  # Add this line for login
     path('logout/', logout_view, name='logout'),  # Add logout URL
 ]

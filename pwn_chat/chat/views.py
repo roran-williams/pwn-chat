@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
-from .models import Message, PrivateMessage, Room, Status
+from .models import Message, Room, Status
 
 from django.utils import timezone
 
@@ -110,21 +110,21 @@ def chat_room(request,room_name):
     return render(request, "chat.html", {'message_count':message_count, 'last_message_timestamp':last_message_timestamp, 'room': room,'username': username, 'page_obj': page_obj})
 
 
-def private_chat_room(request, username):
-    other_user = get_object_or_404(User, username=username)
+# def private_chat_room(request, username):
+#     other_user = get_object_or_404(User, username=username)
     
-    # Get the chat history between the logged-in user and the other user
-    messages = PrivateMessage.objects.filter(
-        sender__in=[request.user, other_user],
-        receiver__in=[request.user, other_user]
-    ).order_by('timestamp')
+#     # Get the chat history between the logged-in user and the other user
+#     messages = PrivateMessage.objects.filter(
+#         sender__in=[request.user, other_user],
+#         receiver__in=[request.user, other_user]
+#     ).order_by('timestamp')
 
-    # messages = PrivateMessage.objects.filter(
-    #     (Q(sender=request.user) & Q(receiver=other_user)) |
-    #     (Q(sender=other_user) & Q(receiver=request.user))
-    # ).order_by('-timestamp')[:50]
+#     # messages = PrivateMessage.objects.filter(
+#     #     (Q(sender=request.user) & Q(receiver=other_user)) |
+#     #     (Q(sender=other_user) & Q(receiver=request.user))
+#     # ).order_by('-timestamp')[:50]
 
-    return render(request, 'private_chat.html', {
-        'other_user': other_user,
-        'messages': messages,
-    })
+#     return render(request, 'private_chat.html', {
+#         'other_user': other_user,
+#         'messages': messages,
+#     })

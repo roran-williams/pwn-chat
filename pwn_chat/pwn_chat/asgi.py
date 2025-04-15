@@ -14,6 +14,8 @@ django.setup()
 
 # ✅ Now it's safe to import from apps
 from chat.routing import websocket_urlpatterns
+from private_chat.routing import websocket_urlpatterns
+
 
 # 3. Define the application
 application = ProtocolTypeRouter({

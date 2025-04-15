@@ -37,11 +37,11 @@ class Message(models.Model):
         return f"{self.sender.username}: {self.text[:20]}"
 
 
-class PrivateMessage(models.Model):
-    sender = models.ForeignKey(User, related_name='private_sent_messages', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='private_received_messages', on_delete=models.CASCADE)
-    text = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class PrivateMessage(models.Model):
+#     sender = models.ForeignKey(User, related_name='private_sent_messages', on_delete=models.CASCADE)
+#     receiver = models.ForeignKey(User, related_name='private_received_messages', on_delete=models.CASCADE)
+#     text = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.sender} → {self.receiver}: {self.text[:30]}"
+#     def __str__(self):
+#         return f"{self.sender} → {self.receiver}: {self.text[:30]}"

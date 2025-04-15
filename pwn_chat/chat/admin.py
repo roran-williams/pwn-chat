@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Message, Room, Status, PrivateMessage
+from .models import Message, Room, Status
 
 # Register your models here.
 @admin.register(Message)
@@ -23,8 +23,8 @@ class StatusAdmin(admin.ModelAdmin):
     list_filter = ('name', 'is_default', 'hide_by_default')
 
 
-@admin.register(PrivateMessage)
-class PrivateMessageAdmin(admin.ModelAdmin):
-    list_display = ('sender','receiver', 'text', 'timestamp')
-    search_fields =  ('sender','receiver', 'text', 'timestamp')
-    list_filter = ('sender','receiver', 'text', 'timestamp')
+# @admin.register(PrivateMessage)
+# class PrivateMessageAdmin(admin.ModelAdmin):
+#     list_display = ('sender','receiver', 'text', 'timestamp')
+#     search_fields =  ('sender','receiver', 'text', 'timestamp')
+#     list_filter = ('sender','receiver', 'text', 'timestamp')
