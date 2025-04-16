@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Theme</title>
+    <link rel="stylesheet" href="{% static 'pwn.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cyberpunk Hacker Hub</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section>
+                <h2>Welcome to the Underground</h2>
+                <p>This is a test page to showcase the cyberpunk-style theme. Modify the CSS to enhance the glowing neon effects.</p>
+                <button class="neon-button">Hack The System</button>
+            </section>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            <p>© 2025 Cyberpunk Labs</p>
+        </footer>
+    </div>
+</body>
+</html>

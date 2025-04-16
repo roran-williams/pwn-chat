@@ -1,9 +1,13 @@
-{% extends 'base.html' %}
-
+{% extends 'rooms/base.html' %}
+{% load static %}
+{% block head %}
+{% endblock %}
 
 {% block content %}
-<h2>Available Rooms</h2>
-<ul>
+<div class="container">
+    <h2>Available Rooms</h2>
+    <div class="card">
+<ul style="list-style-type:none">
   
   {% for room in rooms %}
     {% for i in count_list %}
@@ -27,6 +31,7 @@
     {%endfor%}
   {% endfor %}
 </ul>
+</div>
 
 <form id="room_name" method="get" action="{% url 'chat_room' ' ' %}">
     <input name="room" id="room" placeholder="Enter new room name" />
@@ -37,6 +42,8 @@
     <input name="user" id="user" placeholder="Enter username to chat with" />
     <button onclick="set_private_url()" type="submit"> open chat</button>
 </form>
+  
+</div>
 
 <script>
     const get_url = document.getElementById('room_name')
