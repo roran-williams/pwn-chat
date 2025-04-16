@@ -59,3 +59,5 @@ def chat_room(request,room_name):
     
     # Pass the username and the paginated messages to the template
     return render(request, "chat.html", {'message_count':message_count, 'last_message_timestamp':last_message_timestamp, 'room': room,'username': username, 'page_obj': page_obj})
+
+
