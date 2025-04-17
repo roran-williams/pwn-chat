@@ -5,35 +5,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyberpunk Theme</title>
+    <title>UmbraSyndicate</title>
     <link rel="stylesheet" href="{% static 'pwn.css' %}">
-
+    <style>
+        .icon { font-size: 40px; color: #007BFF; margin-bottom: 15px; transition: 0.3s; }
+        
+         .services { 
+            display: flex; 
+            justify-content:center; 
+            flex-wrap: wrap; }
+        .service-box { 
+            width: 20%; 
+            padding: 20px; 
+            background: #222; 
+            color: #fff; 
+            border-radius: 8px; 
+            margin: 10px; 
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; 
+        }
+        .service-box:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgb(225, 255, 0); 
+            background: #1b1f2b; /* Dark blue-grey color */
+        }
+        .service-box:hover h3, .service-box:hover h5 { color: #e0e0e0; } /* Maintain readability */
+        .service-box:hover i { color: #007BFF; } /* Keep icons blue */
+       
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Cyberpunk Hacker Hub</h1>
+            <div class="card">
+            <h1>UmbraSyndicate</h1>
+            <nav>
+                <ul>
+                    <a href="#"><li>Home</li></a>
+                    <a href="#"><li>About</li></a>
+                    <a href="#"><li>Forums</li></a>
+                    <a href="#"><li>Chat privately</li></a>
+                    <a href="#"><li>Resources</li></a>
+                </ul>
+            </nav>
+        </div>
         </header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
+        
         <main>
             <section>
-                <h2>Welcome to the Underground</h2>
-                <p>This is a test page to showcase the cyberpunk-style theme. Modify the CSS to enhance the glowing neon effects.</p>
-                <button class="neon-button">Hack The System</button>
+            <div class="card">
+                <h2>🦇 Welcome to the Underground </h2>
+                <p><strong>
+                    UmbraSyndicate is an underground organization founded by jamal in 2025.<br>
+                    The main objective of this organization is to offer A-level <a href="#">cyber security services</a> to critical organizations.<br>
+                    This organization is independent and not tied to any government.<br>
+                    we only recruite the best.<br>
+                    Any operations conducted by this organization is Lawfull and does not in any circumstances illegal activities.<br>
+                    we are governed by the <a href="#">commandments</a>.<br>
+                </strong></p>
+            </div>
+
+            <div class="card">
+                <h2>🤖 Our Services</h2>
+                <p><strong>
+                We Bring Cybersecurity Solutions for a Safer Digital World
+                </strong></p>
+                <div class="services">
+                    <div class="service-box">
+                        <i class="fas fa-user-secret icon"></i>
+                        <h3>Penetration Testing</h3>
+                        <h5>Simulated attacks to expose vulnerabilities before hackers do.</h5>
+                    </div>
+                    <div class="service-box">
+                        <i class="fas fa-shield-alt icon"></i>
+                        <h3>Security Audits</h3>
+                        <h5>In-depth evaluations to identify security gaps and risks.</h5>
+                    </div>
+                    <div class="service-box">
+                        <i class="fas fa-lock icon"></i>
+                        <h3>Managed Security</h3>
+                        <h5>24/7 threat monitoring and response for total security.</h5>
+                    </div>
+                    <div class="service-box">
+                        <i class="fas fa-gavel icon"></i>
+                        <h3>Compliance & Risk</h3>
+                        <h5>Ensuring alignment with security standards like ISO27001.</h5>
+                    </div>
+                    <div class="service-box">
+                        <i class="fas fa-chalkboard-teacher icon"></i>
+                        <h3>Security Training</h3>
+                        <h5>Cyber awareness programs for employees and businesses.</h5>
+                    </div>
+                    <div class="service-box">
+                        <i class="fas fa-exclamation-triangle icon"></i>
+                        <h3>Incident Response</h3>
+                        <h5>Rapid response teams to mitigate cyber threats in real-time.</h5>
+                    </div>
+                </div>
+                
+                <h2>💡 Why Choose Us?</h2>
+            <ul>
+                <li><strong>✔️ ISO27001-certified cybersecurity professionals.</strong></li>
+                <li><strong>✔️ AI-powered security analysis & threat detection.</strong></li>
+                <li><strong>✔️ Trusted by global enterprises and government agencies.</strong></li>
+                <li><strong>✔️ Cutting-edge technology and customized security solutions.</strong></li>
+            </ul>
+            </div>
+              
+            <div class="card">
+            <h2>🥷 Training & Resources</h2>
+            
+            <div class="services">
+                <div class="service-box">
+                    <i class="fas fa-user-secret icon"></i>
+                    <h3>Penetration Testing</h3>
+                    <h5>Simulated attacks to expose vulnerabilities before hackers do.</h5>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-shield-alt icon"></i>
+                    <h3>Security Audits</h3>
+                    <h5>In-depth evaluations to identify security gaps and risks.</h5>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-lock icon"></i>
+                    <h3>Managed Security</h3>
+                    <h5>24/7 threat monitoring and response for total security.</h5>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-gavel icon"></i>
+                    <h3>Compliance & Risk</h3>
+                    <h5>Ensuring alignment with security standards like ISO27001.</h5>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-chalkboard-teacher icon"></i>
+                    <h3>Security Training</h3>
+                    <h5>Cyber awareness programs for employees and businesses.</h5>
+                </div>
+                <div class="service-box">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    <h3>Incident Response</h3>
+                    <h5>Rapid response teams to mitigate cyber threats in real-time.</h5>
+                </div>
+            </div>
+            <hr>
+
+            <h2>🔐 Umbra Secure Messaging Platform</h2>
+                 AKA <a href="#"><h3 style="display: inline;">" UmbraChat "</h3></a>
+                <p><strong>
+                    This is a secure and anonymous communication platform that allows for different forums and private messaging.<br>
+                    All communications in and through this platform are end to end encrypted which guarantees your privacy and security.
+                
+                </strong></p>
+            <hr>
+            <h2>🆘 Need Help?</h2>
+            <p><strong>
+                Get immediate support from our cybersecurity experts
+            </strong> </p>
+            <a href="#">Submit a Ticket to Our Help Desk</a>
+            
+            </div>
+
+            <div class="card">
+            <h2>🏴‍☠️ Want To Join Us?</h2>
+                <p><strong>
+                    Fill the form bellow.👇
+                </strong></p>
+                <form>
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                    <input type="text">
+                </form>
+            </div>
+
             </section>
+
+            <!-- <section>
             {% block content %}
             {% endblock %}
+            </section> -->
+            
         </main>
         <footer>
-            <p>© 2025 Cyberpunk Labs</p>
-        </footer>
+            <div class="card">
+            <p>📧 Contact Us: <a href="mailto:umbraSyndycate@gmail.com">UmbraSyndicate@gmail.com</a><br>
+                 | 📞 +254 786 473640</p>
+            <p>© 2025 UmbraSyndicate Labs</p>
+            </div>
+        <footer>
+            
     </div>
 </body>
-</html>
+</html
