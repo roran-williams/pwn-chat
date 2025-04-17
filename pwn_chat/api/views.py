@@ -4,8 +4,10 @@ from rooms.models import Room, Status
 from forum.models import Message
 from private_chat.models import PrivateMessage
 from accounts.models import Profile
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def rooms(request):
     rooms = Room.objects.all()
     data = []
@@ -23,6 +25,7 @@ def rooms(request):
     
     return JsonResponse(data,safe=False)
 
+@login_required
 def messages(request):
     messages = Message.objects.all()
     data = []
@@ -40,7 +43,7 @@ def messages(request):
     
     return JsonResponse(data,safe=False)
 
-
+@login_required
 def private_messages(request):
     messages = PrivateMessage.objects.all()
     data = []
@@ -56,7 +59,7 @@ def private_messages(request):
     
     return JsonResponse(data,safe=False)
 
-
+@login_required
 def profiles(request):
     profiles = Profile.objects.all()
     data = []
@@ -81,6 +84,7 @@ def profiles(request):
     
     return JsonResponse(data,safe=False)
 
+@login_required
 def statuses(request):
     statuses = Status.objects.all()
     data = []
