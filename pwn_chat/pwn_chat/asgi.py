@@ -13,7 +13,7 @@ django.setup()
 
 # ✅ Now it's safe to import from apps
 
-from chat.routing import websocket_urlpatterns as public
+from forum.routing import websocket_urlpatterns as public
 from private_chat.routing import websocket_urlpatterns as private
 
 websocket_urlpatterns = private + public

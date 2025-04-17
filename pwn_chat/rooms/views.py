@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from chat.models import Message 
+from forum.models import Message 
 from .models import Room, Status
 from django.utils import timezone
 from django.core.paginator import Paginator

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rooms.models import Room, Status
-from chat.models import Message
+from forum.models import Message
 from private_chat.models import PrivateMessage
 from accounts.models import Profile
 

@@ -8,7 +8,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),  # login/logout
     path("admin/", admin.site.urls),
-    path("forum/", include("chat.urls")),
+    path("forum/", include("forum.urls")),
     path("rooms/", include("rooms.urls")),
     path("api/", include("api.urls")),
     path("private/", include("private_chat.urls")),
