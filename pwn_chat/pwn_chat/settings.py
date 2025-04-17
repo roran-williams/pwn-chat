@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'ticketing_system',
     'private_chat',
     'accounts',
     'rooms',

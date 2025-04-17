@@ -6,6 +6,7 @@ from pwn_chat import settings
 
 urlpatterns = [
     path('accounts/', include('accounts.urls')),
+    path('staff/', include('ticketing_system.urls')),
     path('accounts/', include('django.contrib.auth.urls')),  # login/logout
     path("admin/", admin.site.urls),
     path("forum/", include("forum.urls")),
