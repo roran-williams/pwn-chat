@@ -18,7 +18,6 @@ urlpatterns = [
     path('submit_comment/<int:ticket_id>/', views.submit_comment, name='submit_comment'),
     path('delete/<int:ticket_id>/', views.delete_ticket, name='delete_ticket'),
     path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
-    path('project/', views.project, name='project'),
     path("ticket/<int:ticket_id>/pdf/", views.generate_ticket_pdf, name="generate_ticket_pdf"),
     path('analytics/', analytics, name="analytics"),
     path('analytics/data/', get_ticket_data, name="ticket_data"),

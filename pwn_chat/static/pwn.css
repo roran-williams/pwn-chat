@@ -19,28 +19,31 @@ body {
     border-radius: 5px;
 }
 
-h1, h2, h5, h6 {
+h1, h5, h6 {
     color: #00ccff;
     text-shadow: 0 0 5px #00ccff;
 }
 
-h3, h4{
+h3{
     color: #ff0000;
     text-shadow: 0 0 5px #ff0000;
 }
 
-a, b{
+a, b, h4{
     color: #ff00ff;
     text-shadow: 0 0 5px #ff00ff;
 }
 
+p:focus{
+    color: #00ccff;
+}
 
 p {
     color: #44ff00;
     text-shadow: 0 0 5px  #44ff00;
 }
 
-strong, li {
+strong, li{
     color: #ffff00;
     text-shadow: 0 0 5px  #ffff00;
 }
@@ -49,9 +52,9 @@ li{
     list-style-type: none;
 }
 button, .btn {
-    background: #111;
-    color: #00ff99;
-    border: 2px solid #00ff99;
+    background:  #ffff00;
+    color: #000000;
+    border: 2px solid #000000;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
@@ -59,9 +62,11 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-    background: #00ff99;
+    background:  #ffff00;
     color: #000;
-    box-shadow: 0 0 10px #00ff99;
+    border: 2px solid #ffff00;
+
+    box-shadow: 0 0 10px #ffff00;
 }
 
 input, select {
@@ -86,7 +91,9 @@ a {
 }
 
 a:hover {
-    text-shadow: 0 0 5px #00ccff;
+    text-shadow: 0 0 5px  #ffff00;
+    color: #ffff00;
+    text-decoration: none;
 }
 
 @media screen and (max-width: 768px) {
@@ -94,3 +101,4 @@ a:hover {
         width: 100%;
     }
 }
+

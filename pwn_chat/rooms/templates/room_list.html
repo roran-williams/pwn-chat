@@ -1,7 +1,9 @@
-{% extends 'rooms/base.html' %}
 {% load static %}
 
 {% block head %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'pwn.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -14,7 +16,7 @@
     {% for i in count_list %}
     <div>
       {% if i.name == room.name%}
-      <li>
+      <li style="padding:2px;">
         <b>{{ room.name }}</b>
         <b>{{i.count}} txts</b>
         <a href="{% url 'chat_room' room.name %}">
@@ -23,7 +25,7 @@
         
         {% if room.created_by == request.user %}
         <a href="{% url 'update' room.name %}">
-        <button>update</button>
+        <button style="border-radius:10px;">update</button>
         </a>
         {%endif%}
     </li>
@@ -34,6 +36,7 @@
 </ul>
 </div>
 
+<div class="card">
 <form id="room_name" method="get" action="{% url 'chat_room' ' ' %}">
     <input name="room" id="room" placeholder="Enter new room name" />
     <button onclick="set_url()" type="submit">Join / Create Room</button>
@@ -43,7 +46,7 @@
     <input name="user" id="user" placeholder="Enter username to chat with" />
     <button onclick="set_private_url()" type="submit"> open chat</button>
 </form>
-  
+</div>
 </div>
 
 <script>

@@ -1,0 +1,260 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UmbraSyndicate</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'pwn.css' %}">
+
+    <style>
+        hr {
+            background-color: white;
+        }
+        .form-control{
+            background-color: #1b1f2b;
+            color: #ffff00;
+            text-shadow: 0 0 5px  #ffff00;
+            
+        }
+
+        .form-control:focus{
+            background-color: #1b1f2b;
+            color: #ffff00;
+            text-shadow: 0 0 5px  #ffff00;
+        }
+        .badge{
+            font-size: medium;
+        }
+        .icon { font-size: 40px; color: #007BFF; margin-bottom: 15px; transition: 0.3s; }
+        
+        .services { 
+        display: flex; 
+        justify-content:center; 
+        flex-wrap: wrap; }
+        .service-box { 
+            padding: 20px; 
+            background: #222; 
+            color: #fff; 
+            border-radius: 8px; 
+            margin: 10px; 
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; 
+        }
+        .service-box:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgb(225, 255, 0); 
+            background: #1b1f2b; /* Dark blue-grey color */
+        }
+        .service-box:hover h4, .service-box:hover h6 { color: #e0e0e0; } /* Maintain readability */
+        .service-box:hover i { color: #007BFF; } /* Keep icons blue */
+       
+    </style>
+</head>
+
+<body >
+    <div class="container">
+        <header class="">
+            <div class="card ">
+                <h1 class="text-center">UmbraSyndicate</h1>
+                <nav class="row ">
+                    <a href="#about" class="col badge">About</a>
+                    <a href="#services" class="col badge">Services</a>
+                    <a href="#resources" class="col badge">Training & Resources</a>
+                    <a href="#umbrachat" class="col badge">UmbraChat</a>
+                    <a href="#helpdesk" class="col badge">Help Desk</a>
+                    <a href="#join-us" class="col badge">Join us</a>
+                    <a href="#contact-us" class="col badge">Contact us</a>
+                
+                </nav>
+            </div>
+        </header>
+    
+        <main>
+            <section>
+            <div class="card " id="about">
+                <h3 >🦇 Welcome to the Underground </h3>
+                <p><strong>
+                    UmbraSyndicate is an underground organization founded by jamal in 2025.<br>
+                    The main objective of this organization is to offer A-level <a href="#">cyber security services</a> to critical organizations.<br>
+                    This organization is independent and not tied to any government.<br>
+                    we only recruite the best.<br>
+                    Any operations conducted by this organization is Lawfull and does not in any circumstances illegal activities.<br>
+                    we are governed by the <a href="#">commandments</a>.<br>
+                </strong></p>
+            </div>
+
+            <div class="card " id="services">
+                <h3>🤖 Our Services</h3>
+                <p><strong>
+                We Bring Cybersecurity Solutions for a Safer Digital World
+                </strong></p>
+                <div class="services row">
+                    <div class="service-box col">
+                        <i class="fas fa-user-secret icon"></i>
+                        <h4>Penetration Testing</h4>
+                        <h6>Simulated attacks to expose vulnerabilities before hackers do.</h6>
+                    </div>
+                    <div class="service-box col">
+                        <i class="fas fa-shield-alt icon"></i>
+                        <h4>Security Audits</h4>
+                        <h6>In-depth evaluations to identify security gaps and risks.</h6>
+                    </div>
+                    <div class="service-box col">
+                        <i class="fas fa-lock icon"></i>
+                        <h4>Managed Security</h4>
+                        <h6>24/7 threat monitoring and response for total security.</h6>
+                    </div>
+                    <div class="service-box col">
+                        <i class="fas fa-gavel icon"></i>
+                        <h4>Compliance & Risk</h4>
+                        <h6>Ensuring alignment with security standards like ISO27001.</h6>
+                    </div>
+                    <div class="service-box col">
+                        <i class="fas fa-chalkboard-teacher icon"></i>
+                        <h4>Security Training</h4>
+                        <h6>Cyber awareness programs for employees and businesses.</h6>
+                    </div>
+                    <div class="service-box col">
+                        <i class="fas fa-exclamation-triangle icon"></i>
+                        <h4>Incident Response</h4>
+                        <h6>Rapid response teams to mitigate cyber threats in real-time.</h6>
+                    </div>
+                </div>
+                
+                <h3>💡 Why Choose Us?</h3>
+            <ul>
+                <li><strong>✔️ ISO27001-certified cybersecurity professionals.</strong></li>
+                <li><strong>✔️ AI-powered security analysis & threat detection.</strong></li>
+                <li><strong>✔️ Trusted by global enterprises and government agencies.</strong></li>
+                <li><strong>✔️ Cutting-edge technology and customized security solutions.</strong></li>
+            </ul>
+            </div>
+              
+            <div class="card " id="resources">
+            <h3>🥷 Training & Resources</h3>
+            
+            <div class="services row">
+                <div class="service-box col">
+                    <i class="fas fa-user-secret icon"></i>
+                    <h4>Penetration Testing</h4>
+                    <h6>Simulated attacks to expose vulnerabilities before hackers do.</h6>
+                </div>
+                <div class="service-box col">
+                    <i class="fas fa-shield-alt icon"></i>
+                    <h4>Security Audits</h4>
+                    <h6>In-depth evaluations to identify security gaps and risks.</h6>
+                </div>
+                <div class="service-box col">
+                    <i class="fas fa-lock icon"></i>
+                    <h4>Managed Security</h4>
+                    <h6>24/7 threat monitoring and response for total security.</h6>
+                </div>
+                <div class="service-box col">
+                    <i class="fas fa-gavel icon"></i>
+                    <h4>Compliance & Risk</h4>
+                    <h6>Ensuring alignment with security standards like ISO27001.</h6>
+                </div>
+                <div class="service-box col">
+                    <i class="fas fa-chalkboard-teacher icon"></i>
+                    <h4>Security Training</h4>
+                    <h6>Cyber awareness programs for employees and businesses.</h6>
+                </div>
+                <div class="service-box col">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    <h4>Incident Response</h4>
+                    <h6>Rapid response teams to mitigate cyber threats in real-time.</h6>
+                </div>
+            </div>
+            <hr id="umbrachat">
+
+            <h3>🔐 Umbra Secure Messaging Platform</h3>
+                 AKA <a href="#"><h4 style="display: inline;">" UmbraChat "</h4></a>
+                <p><strong>
+                    This is a secure and anonymous communication platform that allows for different forums and private messaging.<br>
+                    All communications in and through this platform are end to end encrypted which guarantees your privacy and security.
+                
+                </strong></p>
+            <hr id="helpdesk">
+            <h3>🆘 Need Help?</h3>
+            <p><strong>
+                Get immediate support from our cybersecurity experts
+            </strong> </p>
+            <div class="card">
+                <h3 class="text-center">Create a Ticket</h3>
+                <form action="/staff/submit_ticket/" method="POST">
+                    {% csrf_token %}
+    
+                    <div class="mb-3 row px-3">
+                        <label for="organization" class="col-4 form-label">Organization</label>
+                        <input type="text" class="col-8 form-control" id="organization" name="organization" required>
+                    </div> 
+    
+                    <div class="mb-3 row px-3">
+                        <label for="name" class="col-4 form-label">Subject</label>
+                        <input type="text" class="col-8 form-control" id="name" name="name" required>
+                    </div>
+    
+                    <div class="mb-3 row px-3">
+                        <label for="desc" class="col-4 form-label">Description</label>
+                        <textarea class="col-8 form-control" id="desc" name="desc" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn w-100"><strong style="color: #222;">Submit Ticket to Our Help Desk</strong></button>
+                    
+                </form>
+            
+            </div>
+            
+
+            
+            </div>
+
+            <div class="card " id="join-us">
+            <h3>🏴‍☠️ Want To Join Us?</h3>
+                <p><strong>
+                    Fill the form bellow.👇
+                </strong></p>
+                <div>
+                <form action="#" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+     
+                    <div class="mb-3">
+                        <label for="desc" class="form-label">Why do you want to join us</label>
+                        <textarea class="form-control" id="desc" name="desc" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100"><strong style="color: #222;">Submit Form</strong></button>
+                </form>
+            </div>
+
+            </section>
+            
+        </main>
+        <footer>
+            <div class="card shadow">
+            <p id="contact-us">📧 Contact Us: <a href="mailto:umbraSyndycate@gmail.com">UmbraSyndicate@gmail.com</a><br>
+                 | 📞 +254 786 473640</p>
+            <p> <strong>⚗️ © 2025 UmbraSyndicate Labs </strong> </p>
+            </div>
+        <footer>
+            
+    </div>
+
+    
+</body>
+</html>

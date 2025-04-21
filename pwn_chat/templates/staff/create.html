@@ -1,44 +1,63 @@
-{% extends 'staff/base.html' %}
 {% load static %}
 {% block head %}
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Ticket - Fanan Limited Helpdesk</title>
-    <link rel="stylesheet" href="{% static 'pwn.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-{% endblock %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'pwn.css' %}" rel="stylesheet" >
+    <style>
+        .form-control{
+            background-color: #1b1f2b;
+            color: #ffff00;
+            text-shadow: 0 0 5px  #ffff00;
+            
+        }
+
+        .form-control:focus{
+            background-color: #1b1f2b;
+            color: #ffff00;
+            text-shadow: 0 0 5px  #ffff00;
+        }
+    </style>
+    {% endblock %}
+
 
 {% block content %}
-            <h2 class="text-primary text-center">Create a Support Ticket</h2>
+<div class="container">
+    <div class="card">
+            <h2 class="text-center">Create a Ticket</h2>
             <form action="/staff/submit_ticket/" method="POST">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="name" class="form-label">Subject</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
 
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project</label>
-                    <select class="form-select" id="project" name="project" required>
-                        {% for project in project_list %}
-                            <option value="{{ project.id }}" {% if project.is_default %}selected="selected"{% endif %}>{{ project.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="mb-3 row px-3">
+                    <label for="organization" class="col-4 form-label">Organization</label>
+                    <input type="text" class="col-8 form-control" id="organization" name="organization" required>
                 </div> 
 
-                <div class="mb-3">
-                    <label for="priority" class="form-label">Priority</label>
-                    <select class="form-select" id="priority" name="priority" required>
+                <!-- {% if user.is_staff %}
+                <div class="mb-3 row px-3">
+                    <label for="priority" class="form-label col-4">Priority</label>
+                    <select class="form-select col-8 text-center" id="priority" name="priority" required>
                         {% for priority in priority_list %}
                             <option value="{{ priority.id }}" {% if priority.is_default %}selected="selected"{% endif %} style="color: {{ priority.display_color }};">{{ priority.name }}</option>
                         {% endfor %}
                     </select>
-                </div> 
+                </div>
+                {% else %}
+                <div class="mb-3 row px-3" hidden>
+                    <label for="priority" class="form-label col-4">Priority</label>
+                    <select class="form-select col-8 text-center" id="priority" name="priority" required>
+                        {% for priority in priority_list %}
+                            <option value="{{ priority.id }}" {% if priority.is_default %}selected="selected"{% endif %} style="color: {{ priority.display_color }};">{{ priority.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %} -->
+<!-- 
                 {% if allowed_to_assign_ticket %}
-                <div class="mb-3">
-                    <label for="assigned">Assigned to</label>
-                    <select  class="form-select" id="assigned"  name="assigned" selected="selected">
+                <div class="mb-3 row px-3">
+                    <label for="assigned" class="form-label col-4">Assigned to</label>
+                    <select  class="form-select col-8 text-center" id="assigned"  name="assigned" selected="selected">
                         <option value="unassigned">Unassigned</option>
                         {% for member in tab_users %}
                             <option value="{{ member.id }}">{{ member.username }}</option>
@@ -46,40 +65,51 @@
                     </select>
                 </div>
                 {% else %}
-                <div class="mb-3">
-                    <label for="assigned">Assigned to</label>
-                    <select  class="form-select" id="assigned"  name="assigned" selected="selected" hidden>
+                <div class="mb-3 row px-3">
+                    <label for="assigned" class="form-label col-4">Assigned to</label>
+                    <select  class="form-select col-8 text-center" id="assigned"  name="assigned" selected="selected" hidden>
                         <option value="unassigned">Unassigned</option>
                         {% for member in tab_users %}
                             <option value="{{ member.id }}">{{ member.username }}</option>
                         {% endfor %}
                     </select>
-                    <p class="form-control" >unassigned</p>
+                    <p class="form-control col-8" >unassigned</p>
                 </div>
                 {% endif %}
-                
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status" required>
-                        {% if user.is_staff %}
+                 -->
+                <!-- {% if user.is_staff %}
+                <div class="mb-3 row px-3" >
+                    <label for="status" class="col-4 form-label">Status</label>
+                    <select class="col-8 form-select text-center" id="status" name="status" required>
                         {% for status in status_list %}
                             <option value="{{ status.id }}" {% if status.is_default %}{% endif %}>{{ status.name }}</option>
                         {% endfor %}
-                        {%else%}
-                        <option value='{{pos}}' selected="selected" hidden>ticket on creation</option>
-                        {% endif %}
                     </select>
-                    
                 </div>
-                <div class="mb-3">
-                    <label for="desc" class="form-label">Description</label>
-                    <textarea class="form-control" id="desc" name="desc" rows="4" required></textarea>
+                {% else %}
+                <select class="col-8 form-select text-center" id="status" name="status" hidden>
+                    {% for status in status_list %}
+                        <option value="{{ submitted.id }}" {% if status.is_default %}{% endif %}>{{ status.name }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %} -->
+
+                <div class="mb-3 row px-3">
+                    <label for="name" class="col-4 form-label">Subject</label>
+                    <input type="text" class="col-8 form-control" id="name" name="name" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Submit Ticket</button>
+
+                <div class="mb-3 row px-3">
+                    <label for="desc" class="col-4 form-label">Description</label>
+                    <textarea class="col-8 form-control" id="desc" name="desc" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn w-100">Submit Ticket</button>
+                
             </form>
-            <a href="/staff/tickets/" class="btn btn-secondary mt-3 w-100">Back to Tickets</a>
-        {% block script %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        </div>
+    </div>
+            {% block script %}
         {% endblock %}
 
 {% endblock %}

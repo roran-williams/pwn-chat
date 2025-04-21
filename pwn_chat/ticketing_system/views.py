@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import Priority, TicketStatus, Project, Ticket, TicketComment
+from .models import Priority, TicketStatus,Ticket, TicketComment
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib import messages
@@ -38,21 +38,19 @@ def admin_required(view_func):
 
 
 @login_required
-@admin_required
 def create(request):
     priority_list = Priority.objects.all()
     status_list = TicketStatus.objects.all()
-    project_list = Project.objects.all()
-    
+    submitted = status_list.get(name='submitted')
     user_list = User.objects.all()
     support_staff = []
     for member in user_list:
         if member.has_perm('simpleticket.change_status') and not member.is_superuser:
             support_staff.append(member)
 
-    return render(request, 'staff/create.html', {'tab_users': support_staff,
+    return render(request, 'staff/create.html', {'submitted':submitted,'tab_users': support_staff,
                                               'priority_list': priority_list, 'status_list': status_list,
-                                              'project_list': project_list})
+                                              })
 
 @login_required
 @admin_required
@@ -85,7 +83,6 @@ def view_all(request):
     created_filter = request.GET.get("created_by")
     priority_filter = request.GET.get("priority")
     status_filter = request.GET.get("status")
-    project_filter = request.GET.get("project")
     closed_filter = request.GET.get("show_closed")
     sort_setting = request.GET.get("sort")
     order_setting = request.GET.get("order")
@@ -108,8 +105,7 @@ def view_all(request):
         args['priority'] = priority_filter
     if status_filter:
         args['status'] = status_filter
-    if project_filter:
-        args['project'] = project_filter
+   
     tickets = Ticket.objects.filter(**args)
 
     # Filter out closed tickets
@@ -143,9 +139,7 @@ def view_all(request):
         if status_filter:
             status = TicketStatus.objects.get(pk=status_filter)
             filterArray.append("Status: " + status.name)
-        if project_filter:
-            project = Project.objects.get(pk=project_filter)
-            filterArray.append("Project: " + project.name)
+        
         if filterArray:
             filter = ', '.join(filterArray)
         else:
@@ -228,7 +222,6 @@ def view_my_tickets(request):
     created_filter = request.GET.get("created_by")
     priority_filter = request.GET.get("priority")
     status_filter = request.GET.get("status")
-    project_filter = request.GET.get("project")
     closed_filter = request.GET.get("show_closed")
     sort_setting = request.GET.get("sort")
     order_setting = request.GET.get("order")
@@ -251,8 +244,7 @@ def view_my_tickets(request):
         args['priority'] = priority_filter
     if status_filter:
         args['status'] = status_filter
-    if project_filter:
-        args['project'] = project_filter
+   
     tickets = user_tickets.filter(**args)
     
 
@@ -287,9 +279,7 @@ def view_my_tickets(request):
         if status_filter:
             status = TicketStatus.objects.get(pk=status_filter)
             filterArray.append("Status: " + status.name)
-        if project_filter:
-            project = Project.objects.get(pk=project_filter)
-            filterArray.append("Project: " + project.name)
+        
         if filterArray:
             filter = ', '.join(filterArray)
         else:
@@ -361,17 +351,22 @@ def view_my_tickets(request):
                                                           'sort': sort_setting, 'order': order_setting,
                                                           'show_closed': show_closed})
 @login_required
-@admin_required
 def submit_ticket(request):
     ticket = Ticket()
-    ticket.project = Project.objects.get(pk=int(request.POST['project']))
-    ticket.priority = Priority.objects.get(pk=int(request.POST['priority']))
-    ticket.status = TicketStatus.objects.get(pk=int(request.POST['status']))
+    ticket.organization = request.POST['organization']
+    ticket.priority = Priority.objects.get(name = 'under_review')
     ticket.created_by = request.user
+    ticket.status = TicketStatus.objects.get(name = 'submitted')
 
     # Handle case of unassigned tickets
     assigned_option = request.POST.get('assigned', 'unassigned')  # Safely get 'assigned', default to 'unassigned'
+    # status_option = request.POST.get('submitted',)
     
+    # if status_option == 'submitted':
+    #     ticket.status = 'submitted'
+    # else:
+
+
     if assigned_option == 'unassigned':
         ticket.assigned_to = None
     else:
@@ -384,7 +379,6 @@ def submit_ticket(request):
     ticket.update_time = datetime.now()
     ticket.name = request.POST['name']
     ticket.desc = request.POST['desc']
-    ticket.time_logged = 0
     ticket.save()
     try:
         email_user(to_email=request.user.email,subject="Helpdesk Ticket Created",message=f"Your ticket '{ticket.name}' has been received.")
@@ -395,39 +389,23 @@ def submit_ticket(request):
         messages.error(request, "could not send email at the moment check your internet connection.")
 
     messages.success(request, "The ticket has been created.")
-    return HttpResponseRedirect("/staff/view/" + str(ticket.id) + "/")
+    if request.user.is_staff:
+        return HttpResponseRedirect("/staff/view/" + str(ticket.id) + "/")
+    else:
+        return HttpResponseRedirect("/staff/ticket/" + str(ticket.id) + "/pdf/")
+
 
 @login_required
 @admin_required
 def submit_comment(request, ticket_id):
     text = request.POST["comment-text"]
-    time_logged = float(request.POST["comment-time-logged"])
-    status = TicketStatus.objects.get(pk=int(request.POST["comment-status"]))
     ticket = get_object_or_404(Ticket, pk=ticket_id)
-
-    # Check if the user has permission to change the status
-    if not request.user.has_perm('simpleticket.change_status'):
-        # If the status is being changed, deny access
-        if status != ticket.status:
-            raise PermissionDenied("You do not have permission to change the ticket status.")
-
-
-    # Update status if necessary (only if permitted)
-    if status != ticket.status:
-        if text != "":
-            text += "\n\n"
-        else:
-            comment.automated = True
-        text += f"<strong>Automated Comment:</strong> Status changed from {ticket.status.name} to {status.name}"
-        ticket.status = status
-        ticket.save()
 
     # Create ticket comment
     comment = TicketComment(
         commenter=request.user, 
         text=text, 
         ticket=ticket, 
-        time_logged=time_logged, 
         update_time=datetime.now()
     )
     
@@ -449,13 +427,11 @@ def update(request, ticket_id):
     
     allowed_to_change_ticket = request.user.has_perm('simpleticket.change_ticket') 
     allowed_to_change_ticket_status = request.user.has_perm('simpleticket.change_status')
-    allowed_to_change_ticket_project = request.user.has_perm('simpleticket.change_project')
     allowed_to_change_ticket_priority = request.user.has_perm('simpleticket.change_priority')
     allowed_to_assign_ticket = request.user.has_perm('simpleticket.assign_ticket')
     
     priority_list = Priority.objects.all()
     status_list = TicketStatus.objects.all()
-    project_list = Project.objects.all()
     users_list = User.objects.filter(is_staff=True)
     support_staff = []
     for u in users_list:
@@ -467,12 +443,11 @@ def update(request, ticket_id):
         'ticket': ticket,
         'allowed_to_change_ticket':allowed_to_change_ticket,
         'allowed_to_assign_ticket':allowed_to_assign_ticket, 
-        'allowed_to_change_ticket_project':allowed_to_change_ticket_project,
         'allowed_to_change_ticket_status':allowed_to_change_ticket_status,
         'allowed_to_change_ticket_priority':allowed_to_change_ticket_priority,
         'tab_users': support_staff,
         'priority_list': priority_list, 'status_list': status_list,
-        'project_list': project_list})
+        })
 
 @login_required
 @admin_required
@@ -495,7 +470,6 @@ def update_ticket(request, ticket_id):
             raise PermissionDenied("You do not have permission to assign tickets")
             
     
-    project = Project.objects.get(pk=int(request.POST['project']))
     priority = Priority.objects.get(pk=int(request.POST['priority']))
     status = TicketStatus.objects.get(pk=int(request.POST['status']))
 
@@ -503,7 +477,6 @@ def update_ticket(request, ticket_id):
     assigned_option = request.POST['assigned']
     assigned_to = None if assigned_option == 'unassigned' else User.objects.get(pk=int(assigned_option))
 
-    ticket.project = project
     ticket.priority = priority
     ticket.status = status  # Status update is allowed only if permitted
     ticket.assigned_to = assigned_to
@@ -567,13 +540,7 @@ def delete_comment(request, comment_id):
         messages.error(request, "email not sent but comment deleted.")
     return HttpResponseRedirect("/staff/view/" + str(comment.ticket.id) + "/")
 
-@login_required
-@admin_required
-def project(request):
-    project_list = Project.objects.all()
 
-    return render(request, 'project.html', {'project_list': project_list})
-@admin_required
 def generate_ticket_pdf(request, ticket_id):
     # Retrieve the ticket from the database
     try:
@@ -606,10 +573,8 @@ def generate_ticket_pdf(request, ticket_id):
     # Ticket details table
     data = [
         ["Subject:", ticket.name],
-        ["Project:", ticket.project],
         ["Status:", ticket.status],
         ["Priority:", Paragraph(ticket.priority.name, priority_style)],
-        ["Time Allocated:", f"{ticket.time_logged} HRS"],
         ["Created By:", ticket.created_by.username],
         ["Assigned To:", ticket.assigned_to.username if ticket.assigned_to else "Unassigned"],
         ["Created On:", ticket.creation_time.strftime("%Y-%m-%d %H:%M:%S")],
@@ -676,13 +641,13 @@ def get_ticket_data(request):
     )
 
     # ⏳ Average Resolution Time
-    avg_resolution = Ticket.objects.aggregate(Avg('time_logged'))['time_logged__avg'] or 0
+    # avg_resolution = Ticket.objects.aggregate(Avg('time_logged'))['time_logged__avg'] or 0
 
     data = {
         "ticket_status": list(ticket_status),
         "tickets_over_time": list(tickets_per_day),
         "agent_performance": list(agent_performance),
-        "avg_resolution": round(avg_resolution, 2),
+        # "avg_resolution": round(avg_resolution, 2),
     }
     
     return JsonResponse(data)

@@ -21,9 +21,14 @@ class SignUpForm(forms.ModelForm):
 
 
 
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
             'profile_picture', 'bio','status',
         ]
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4, "class":'form-control'}),
+            'profile_picture':forms.FileInput(attrs={"class":'form-control'})
+        }

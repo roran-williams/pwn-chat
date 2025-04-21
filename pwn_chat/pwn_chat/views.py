@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+def homepage(request):
+    return render(request, 'homepage.html')
+
+
 def login_view(request):
     # If the user is already authenticated, redirect to the chat page
     if request.user.is_authenticated:

@@ -1,101 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Private Chat with {{ other_user.username }}</title>
-    <style>
-        body {
-            background-color: #0d0d0d;
-            color: #00ff99;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-        }
-
-        h2 {
-            color: #FFEA00;
-            text-shadow: 2px 2px 5px #00ff99;
-            margin-top: 20px;
-        }
-
-        #chat-log {
-            border: 2px solid #00ff99;
-            height: 300px;
-            overflow-y: auto;
-            padding: 10px;
-            margin: 20px auto;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0px 0px 10px #00ff99;
-            border-radius: 10px;
-            width: 70%;
-            text-align: left;
-        }
-
-        .sent {
-            text-align: right;
-            color: #00ff99;
-        }
-
-        .received {
-            text-align: left;
-            color: #FFEA00;
-        }
-
-        input[type="text"] {
-            width: 60%;
-            padding: 10px;
-            border: 2px solid #FFEA00;
-            background: black;
-            color: #00ff99;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #FFEA00;
-            border: none;
-            color: #0d0d0d;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-left: 10px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #00ff99;
-            color: #0d0d0d;
-            box-shadow: 0px 0px 10px #00ff99;
-        }
-
-        small {
-            font-size: 0.8em;
-            color: #888;
-        }
-
-        #input-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 40px;
-            gap: 10px;
-        }
-    </style>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
 </head>
-<body onload="document.getElementById('chat-message-input').focus();">
-    <h2>Chat with {{ other_user.username }}</h2>
+<body class="bg-black text-green-400 font-mono text-center min-h-screen flex flex-col items-center">
+    <h2 class="text-yellow-400 text-2xl mt-6 drop-shadow-lg">Chat with {{ other_user.username }}</h2>
 
-    <div id="chat-log">
+    <div id="chat-log" class="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 border-2 border-green-400 bg-black/80 mt-6 p-4 rounded-lg shadow-lg overflow-y-auto h-80 text-left space-y-2">
         {% for msg in messages %}
-            <p class="{% if msg.sender.username == request.user.username %}sent{% else %}received{% endif %}">
+            <p class="{% if msg.sender.username == request.user.username %}text-right text-green-400{% else %}text-left text-yellow-400{% endif %}">
                 <strong>{{ msg.sender.username }}</strong>: {{ msg.text }}
-                <small>({{ msg.timestamp|date:"H:i:s" }})</small>
+                <small class="block text-gray-500 text-sm">({{ msg.timestamp|date:"H:i:s" }})</small>
             </p>
         {% endfor %}
     </div>
 
-    <div id="input-wrapper">
-        <input id="chat-message-input" type="text" autocomplete="off" placeholder="Type your message here..." />
-        <button id="chat-message-submit" disabled>Send</button>
+    <div id="input-wrapper" class="w-full flex justify-center items-center gap-4 mt-6 mb-10 px-4">
+        <input id="chat-message-input" type="text" placeholder="Type your message here..."
+               class="w-2/3 md:w-1/2 px-4 py-2 rounded-md border-2 border-yellow-400 bg-black text-green-400 focus:outline-none focus:ring-2 focus:ring-green-400" autocomplete="off" />
+        <button id="chat-message-submit" disabled
+                class="px-5 py-2 bg-yellow-400 text-black font-bold rounded-md hover:bg-green-400 hover:text-black transition-all duration-300 shadow">
+            Send
+        </button>
     </div>
 
     <script>
@@ -116,8 +45,8 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             const messageElement = document.createElement('p');
-            messageElement.className = data.sender === currentUser ? 'sent' : 'received';
-            messageElement.innerHTML = `<strong>${escapeHtml(data.sender)}</strong>: ${escapeHtml(data.message)} <small>(${new Date(data.timestamp).toLocaleTimeString()})</small>`;
+            messageElement.className = data.sender === currentUser ? 'text-right text-green-400' : 'text-left text-yellow-400';
+            messageElement.innerHTML = `<strong>${escapeHtml(data.sender)}</strong>: ${escapeHtml(data.message)}<br><small class="text-gray-500 text-sm">(${new Date(data.timestamp).toLocaleTimeString()})</small>`;
             chatLog.appendChild(messageElement);
             chatLog.scrollTop = chatLog.scrollHeight;
         };

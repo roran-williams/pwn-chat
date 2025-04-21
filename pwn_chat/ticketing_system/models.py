@@ -3,29 +3,6 @@ from django.conf import settings
 from django.db.models import Sum
 from django.contrib.auth.models import User
 
-class Project(models.Model):
-    name = models.CharField(max_length=32)
-    is_default = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
-
-    def active_users(self):
-        # Filter users who are assigned to tickets with status 'open' or 'in_progress'
-        return User.objects.filter(
-            tickets_assigned__project=self, 
-            tickets_assigned__status__name__in=['open', 'in_progress']
-        ).distinct()
-
-    def user_time_map(self):
-        users = self.active_users()
-        timemap = {}
-        for user in users:
-            timemap[user] = Ticket.objects.filter(
-                project=self, assigned_to=user
-            ).aggregate(Sum('time_logged'))['time_logged__sum']
-        return timemap
-
 
 class Priority(models.Model):
     name = models.CharField(max_length=32)
@@ -46,11 +23,11 @@ class TicketStatus(models.Model):
         return self.name
 
 class Ticket(models.Model):
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
+    organization = models.CharField(max_length=28, null=True)
     name = models.CharField(max_length=28)
     desc = models.TextField()
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
-    status = models.ForeignKey(TicketStatus, on_delete=models.CASCADE)  # Use ForeignKey to Status
+    status = models.ForeignKey(TicketStatus,null=True, on_delete=models.CASCADE)  # Use ForeignKey to Status
 
     creation_time = models.DateTimeField()
     update_time = models.DateTimeField()
@@ -62,10 +39,9 @@ class Ticket(models.Model):
         settings.AUTH_USER_MODEL, null=True, related_name='tickets_assigned', on_delete=models.CASCADE
     )
 
-    time_logged = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.name} (Project: {self.project}, Priority: {self.priority}, Assigned: {self.assigned_to})"
+        return f"{self.name} (organization: {self.organization}, Priority: {self.priority}, Assigned: {self.assigned_to})"
 
     class Meta:
         permissions = [
@@ -83,24 +59,6 @@ class TicketComment(models.Model):
     text = models.TextField()
 
     update_time = models.DateTimeField()
-    time_logged = models.FloatField(default=0)
-
-    automated = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self.time_logged < 0:
-            raise ValueError("Time logged cannot be negative.")
-        self.ticket.update_time = self.update_time
-        self.ticket.time_logged += self.time_logged
-        self.ticket.save()
-        super(TicketComment, self).save(*args, **kwargs)
-
-
-class TimeEntry(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    time_logged = models.FloatField()
-    logged_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    description = models.TextField()
 
     def __str__(self):
-        return f"Time logged for {self.ticket.name} by {self.logged_by}"
+        return f"{self.commenter} (ticket: {self.ticket.name})"
